@@ -7,442 +7,376 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0a0a0f;
+  --surface: #13131a;
+  --surface2: #1a1a24;
+  --border: rgba(255,255,255,0.07);
+  --text: #f0ece4;
+  --muted: #7a7a8c;
+  --accent: #c9a96e;
+  --accent2: #e8d5b0;
+  --purple: #7c6fcd;
+  --pink: #e07fa0;
+  --teal: #4ecdc4;
+  --radius: 18px;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
 
-  :root {
-    --bg: #0d0d0d;
-    --surface: #161616;
-    --surface2: #1e1e1e;
-    --border: rgba(255,255,255,0.07);
-    --text: #f0ece4;
-    --muted: #888;
-    --accent: #c9a96e;
-    --accent2: #e8d5b0;
-    --white: #ffffff;
-    --radius: 16px;
-    --gap: clamp(1rem, 4vw, 2.5rem);
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem clamp(1.2rem, 5vw, 4rem);
+  background: rgba(10,10,15,0.88);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem; font-weight: 700;
+  color: var(--accent); text-decoration: none; letter-spacing:.02em;
+}
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a {
+  color: var(--muted); text-decoration: none;
+  font-size: .8rem; letter-spacing: .12em; text-transform: uppercase;
+  transition: color .25s;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-cta {
+  background: var(--accent); color: #0a0a0f;
+  padding: .5rem 1.3rem; border-radius: 50px;
+  font-size: .8rem; font-weight: 500; letter-spacing:.05em;
+  text-decoration: none; transition: background .25s, transform .2s; white-space:nowrap;
+}
+.nav-cta:hover { background: var(--accent2); transform: translateY(-1px); }
+.hamburger {
+  display: none; flex-direction: column; gap: 5px;
+  cursor: pointer; background: none; border: none; padding: 4px;
+}
+.hamburger span { width:24px; height:2px; background:var(--text); transition:all .3s; }
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.mobile-menu {
+  display:none; position:fixed; top:60px; left:0; right:0;
+  background:rgba(10,10,15,.97); backdrop-filter:blur(20px);
+  padding:2rem; z-index:199;
+  border-bottom:1px solid var(--border);
+  flex-direction:column; gap:1.5rem;
+}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{color:var(--text);text-decoration:none;font-size:1.1rem;letter-spacing:.08em;text-transform:uppercase;padding:.5rem 0;border-bottom:1px solid var(--border);}
+.mobile-menu .nav-cta{text-align:center;border-bottom:none;}
+@media(max-width:768px){
+  .nav-links, nav>.nav-cta{display:none;}
+  .hamburger{display:flex;}
+}
+
+/* ── HERO ── */
+#hero {
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 2rem;
+  padding: calc(80px + 3rem) clamp(1.2rem,5vw,4rem) 4rem;
+  position: relative; overflow: hidden;
+}
+@media(max-width:900px){
+  #hero{
+    grid-template-columns:1fr;
+    text-align:center;
   }
+  .hero-btns{justify-content:center;}
+  .hero-stats{justify-content:center;}
+  .hero-illustration{order:-1; display:flex; justify-content:center;}
+}
 
-  html { scroll-behavior: smooth; }
+/* hero background glow blobs */
+#hero::before {
+  content:''; position:absolute; width:600px; height:600px;
+  background: radial-gradient(circle, rgba(201,169,110,.12) 0%, transparent 70%);
+  top:-100px; left:-200px; pointer-events:none; border-radius:50%;
+}
+#hero::after {
+  content:''; position:absolute; width:500px; height:500px;
+  background: radial-gradient(circle, rgba(124,111,205,.1) 0%, transparent 70%);
+  bottom:-100px; right:-100px; pointer-events:none; border-radius:50%;
+}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 300;
-    line-height: 1.7;
-    overflow-x: hidden;
-  }
+.hero-content { position: relative; z-index:1; }
+.hero-tag {
+  display:inline-flex; align-items:center; gap:.5rem;
+  background:rgba(201,169,110,.1); border:1px solid rgba(201,169,110,.25);
+  color:var(--accent); padding:.35rem .9rem; border-radius:50px;
+  font-size:.75rem; letter-spacing:.12em; text-transform:uppercase;
+  margin-bottom:1.8rem; width:fit-content;
+  animation:fadeUp .8s ease both;
+}
+.hero-tag::before{content:'';width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.5)}}
+.hero-name {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(3rem,8vw,7.5rem);
+  font-weight:900; line-height:.92;
+  letter-spacing:-.02em;
+  animation:fadeUp .8s .15s ease both;
+}
+.hero-name span{color:var(--accent);}
+.hero-title {
+  font-size:clamp(.85rem,2vw,1rem); color:var(--muted);
+  letter-spacing:.15em; text-transform:uppercase;
+  margin:1.5rem 0 2rem;
+  animation:fadeUp .8s .3s ease both;
+}
+.hero-desc {
+  max-width:480px; font-size:clamp(.9rem,1.8vw,1.05rem);
+  color:rgba(240,236,228,.72); margin-bottom:2.2rem;
+  animation:fadeUp .8s .45s ease both;
+}
+.hero-desc strong{color:var(--accent2);font-weight:400;}
+.hero-btns{display:flex;flex-wrap:wrap;gap:1rem;animation:fadeUp .8s .6s ease both;}
+.btn-primary{
+  background:var(--accent);color:#0a0a0f;
+  padding:.85rem 2rem;border-radius:50px;
+  font-size:.88rem;font-weight:500;letter-spacing:.04em;
+  text-decoration:none;transition:background .25s,transform .2s;
+}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-2px);}
+.btn-outline{
+  border:1px solid rgba(255,255,255,.18);color:var(--text);
+  padding:.85rem 2rem;border-radius:50px;
+  font-size:.88rem;letter-spacing:.04em;
+  text-decoration:none;transition:border-color .25s,transform .2s;
+}
+.btn-outline:hover{border-color:var(--accent);transform:translateY(-2px);}
+.hero-stats{display:flex;flex-wrap:wrap;gap:2rem;margin-top:3rem;animation:fadeUp .8s .75s ease both;}
+.stat{display:flex;flex-direction:column;gap:.2rem;}
+.stat-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--accent);line-height:1;}
+.stat-label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;}
 
-  /* ─── NAV ─── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1.1rem clamp(1.2rem, 5vw, 4rem);
-    background: rgba(13,13,13,0.85);
-    backdrop-filter: blur(18px);
-    border-bottom: 1px solid var(--border);
-  }
+/* 3D hero illustration */
+.hero-illustration{position:relative;z-index:1;animation:fadeUp .8s .3s ease both;}
+.hero-illustration svg{width:100%;max-width:500px;filter:drop-shadow(0 30px 60px rgba(201,169,110,.2));}
+@keyframes float1{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes float2{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes float3{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-7px) rotate(5deg)}}
+@keyframes spinSlow{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.ill-main{animation:float1 5s ease-in-out infinite;}
+.ill-card1{animation:float2 4s .5s ease-in-out infinite;}
+.ill-card2{animation:float3 4.5s 1s ease-in-out infinite;}
+.ill-orb{animation:float1 3.5s .8s ease-in-out infinite;}
+.ill-ring{animation:spinSlow 18s linear infinite;transform-origin:250px 230px;}
 
-  .nav-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.2rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    color: var(--accent);
-    text-decoration: none;
-  }
+/* ── SECTIONS ── */
+section{padding:clamp(4rem,10vw,8rem) clamp(1.2rem,5vw,4rem);}
+.section-tag{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;}
+.section-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2rem,5vw,3.2rem);font-weight:700;line-height:1.1;
+  margin-bottom:clamp(2.5rem,6vw,4rem);
+}
+.section-title em{color:var(--accent);font-style:italic;}
 
-  .nav-links {
-    display: flex; gap: 2rem; list-style: none;
-  }
+/* reveal */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
 
-  .nav-links a {
-    color: var(--muted); text-decoration: none;
-    font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase;
-    transition: color .25s;
-  }
-  .nav-links a:hover { color: var(--text); }
+/* ── ABOUT ── */
+#about{background:var(--surface);}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,5rem);align-items:start;}
+@media(max-width:768px){.about-grid{grid-template-columns:1fr;}}
+.about-text p{font-size:clamp(.9rem,1.8vw,1rem);color:rgba(240,236,228,.72);margin-bottom:1.2rem;}
+.about-text strong{color:var(--accent2);font-weight:400;}
+.info-cards{display:flex;flex-direction:column;gap:1rem;}
+.info-card{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.2rem 1.4rem;
+  display:flex;align-items:flex-start;gap:1rem;
+  transition:border-color .25s,transform .3s;
+}
+.info-card:hover{border-color:rgba(201,169,110,.25);transform:translateX(4px);}
+.info-icon{font-size:1.4rem;flex-shrink:0;margin-top:.1rem;}
+.info-card h4{font-size:.88rem;font-weight:500;color:var(--text);}
+.info-card p{font-size:.78rem;color:var(--muted);margin:.2rem 0 0;}
+.toolkit{margin-top:2.5rem;}
+.toolkit h3{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;}
+.toolkit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(95px,1fr));gap:.7rem;}
+.tool-pill{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:10px;padding:.6rem .8rem;
+  font-size:.78rem;color:var(--text);text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:.3rem;
+  transition:border-color .25s,transform .2s;
+}
+.tool-pill:hover{border-color:rgba(201,169,110,.3);transform:translateY(-3px);}
+.tool-emoji{font-size:1.2rem;}
+.tool-sub{font-size:.65rem;color:var(--muted);}
 
-  .nav-cta {
-    background: var(--accent); color: #0d0d0d;
-    padding: .5rem 1.3rem; border-radius: 50px;
-    font-size: 0.82rem; font-weight: 500; letter-spacing: 0.05em;
-    text-decoration: none; transition: background .25s, transform .2s;
-    white-space: nowrap;
-  }
-  .nav-cta:hover { background: var(--accent2); transform: translateY(-1px); }
+/* about illustration */
+.about-illustration{display:flex;justify-content:center;margin-bottom:2rem;}
+.about-illustration svg{width:100%;max-width:420px;filter:drop-shadow(0 20px 40px rgba(124,111,205,.2));}
 
-  /* hamburger */
-  .hamburger {
-    display: none; flex-direction: column; gap: 5px;
-    cursor: pointer; background: none; border: none; padding: 4px;
-  }
-  .hamburger span {
-    width: 24px; height: 2px; background: var(--text);
-    transition: all .3s;
-  }
-  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  .hamburger.open span:nth-child(2) { opacity: 0; }
-  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+/* ── SKILLS ── */
+#skills{background:var(--bg);position:relative;overflow:hidden;}
+#skills::before{
+  content:'';position:absolute;width:800px;height:800px;
+  background:radial-gradient(circle,rgba(124,111,205,.06) 0%,transparent 65%);
+  top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;
+}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.2rem;}
+.skill-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.8rem;
+  transition:border-color .25s,transform .3s;position:relative;overflow:hidden;
+}
+.skill-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.skill-card:hover{border-color:rgba(201,169,110,.25);transform:translateY(-5px);}
+.skill-card:hover::before{opacity:1;}
+.skill-icon{font-size:2rem;margin-bottom:1rem;}
+.skill-card h3{font-size:.95rem;font-weight:500;margin-bottom:1rem;}
+.skill-tags{display:flex;flex-wrap:wrap;gap:.5rem;}
+.tag{
+  background:rgba(201,169,110,.08);border:1px solid rgba(201,169,110,.15);
+  color:var(--accent2);padding:.2rem .6rem;border-radius:4px;
+  font-size:.7rem;letter-spacing:.05em;
+}
 
-  .mobile-menu {
-    display: none; position: fixed; top: 60px; left: 0; right: 0;
-    background: rgba(13,13,13,0.97); backdrop-filter: blur(20px);
-    padding: 2rem; z-index: 99;
-    border-bottom: 1px solid var(--border);
-    flex-direction: column; gap: 1.5rem;
-  }
-  .mobile-menu.open { display: flex; }
-  .mobile-menu a {
-    color: var(--text); text-decoration: none;
-    font-size: 1.1rem; letter-spacing: 0.08em; text-transform: uppercase;
-    padding: .5rem 0; border-bottom: 1px solid var(--border);
-  }
-  .mobile-menu .nav-cta { text-align: center; border-bottom: none; }
+/* skills 3D deco */
+.skills-deco{display:flex;justify-content:center;margin-bottom:3rem;}
+.skills-deco svg{width:100%;max-width:380px;}
 
-  @media (max-width: 768px) {
-    .nav-links, nav > .nav-cta { display: none; }
-    .hamburger { display: flex; }
-  }
+/* ── EXPERIENCE ── */
+#experience{background:var(--surface);}
+.exp-layout{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
+@media(max-width:768px){.exp-layout{grid-template-columns:1fr;}}
+.timeline{position:relative;padding-left:2rem;}
+.timeline::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:1px;background:var(--border);}
+.timeline-item{position:relative;margin-bottom:3rem;padding-left:1.5rem;}
+.timeline-item::before{
+  content:'';position:absolute;left:-2.35rem;top:6px;
+  width:10px;height:10px;border-radius:50%;
+  background:var(--accent);box-shadow:0 0 0 4px rgba(201,169,110,.15);
+}
+.timeline-meta{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-bottom:.6rem;}
+.timeline-badge{
+  background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.2);
+  color:var(--accent);padding:.2rem .7rem;border-radius:4px;
+  font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+}
+.timeline-date{font-size:.76rem;color:var(--muted);}
+.timeline-item h3{font-size:1.05rem;font-weight:500;margin-bottom:.3rem;}
+.timeline-item .company{font-size:.82rem;color:var(--accent);margin-bottom:.8rem;}
+.timeline-item ul{padding-left:1.2rem;}
+.timeline-item li{font-size:.85rem;color:rgba(240,236,228,.68);margin-bottom:.4rem;}
+.exp-illustration{display:flex;align-items:center;justify-content:center;}
+.exp-illustration svg{width:100%;max-width:340px;filter:drop-shadow(0 20px 50px rgba(78,205,196,.15));}
 
-  /* ─── HERO ─── */
-  #hero {
-    min-height: 100svh;
-    display: flex; flex-direction: column; justify-content: center;
-    padding: calc(4rem + 60px) clamp(1.2rem, 5vw, 4rem) 4rem;
-    position: relative; overflow: hidden;
-  }
+/* ── PROJECTS ── */
+#projects{background:var(--bg);}
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1.2rem;}
+.project-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:2rem;
+  display:flex;flex-direction:column;
+  transition:border-color .25s,transform .3s;position:relative;overflow:hidden;
+}
+.project-card::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 80% 20%,rgba(201,169,110,.04),transparent 60%);
+  pointer-events:none;
+}
+.project-card:hover{border-color:rgba(201,169,110,.3);transform:translateY(-5px);}
+.project-icon-wrap{
+  width:56px;height:56px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:1.3rem;font-size:1.6rem;
+  background:var(--surface2);border:1px solid var(--border);
+}
+.project-card h3{font-size:.95rem;font-weight:500;margin-bottom:.7rem;}
+.project-card p{font-size:.83rem;color:rgba(240,236,228,.62);flex:1;margin-bottom:1.2rem;}
+.project-tags{display:flex;flex-wrap:wrap;gap:.5rem;}
 
-  .hero-noise {
-    position: absolute; inset: 0; opacity: 0.03;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-repeat: repeat; pointer-events: none;
-  }
+/* project visual strip */
+.project-visual{
+  height:110px;border-radius:10px;
+  margin-bottom:1.3rem;overflow:hidden;
+  background:var(--surface2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+}
+.project-visual svg{width:100%;height:100%;}
 
-  .hero-tag {
-    display: inline-flex; align-items: center; gap: .5rem;
-    background: rgba(201,169,110,0.1); border: 1px solid rgba(201,169,110,0.25);
-    color: var(--accent); padding: .35rem .9rem; border-radius: 50px;
-    font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
-    margin-bottom: 1.8rem; width: fit-content;
-    animation: fadeUp .8s ease both;
-  }
-  .hero-tag::before { content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+/* ── EDUCATION ── */
+#education{background:var(--surface);}
+.edu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1.2rem;}
+.edu-card{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.5rem 1.8rem;
+  transition:border-color .25s,transform .3s;
+}
+.edu-card:hover{border-color:rgba(201,169,110,.25);transform:translateY(-3px);}
+.edu-icon{font-size:1.5rem;margin-bottom:.8rem;}
+.edu-card h3{font-size:.9rem;font-weight:500;margin-bottom:.3rem;}
+.edu-card .institute{font-size:.78rem;color:var(--accent);margin-bottom:.5rem;}
+.edu-card .edu-meta{font-size:.75rem;color:var(--muted);}
 
-  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.5)} }
+/* ── CONTACT ── */
+#contact{background:var(--bg);text-align:center;}
+.contact-inner{max-width:640px;margin:0 auto;}
+.contact-sub{color:rgba(240,236,228,.55);margin-bottom:3rem;font-size:.92rem;}
+.contact-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:3rem;}
+.contact-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.8rem;
+  text-decoration:none;color:var(--text);
+  transition:border-color .25s,transform .2s;
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+}
+.contact-card:hover{border-color:rgba(201,169,110,.3);transform:translateY(-4px);}
+.cc-icon{font-size:1.8rem;}
+.cc-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;}
+.cc-val{font-size:.85rem;color:var(--accent2);}
+.contact-location{display:inline-flex;align-items:center;gap:.5rem;font-size:.83rem;color:var(--muted);}
 
-  .hero-name {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(3.5rem, 10vw, 9rem);
-    font-weight: 900; line-height: 0.9;
-    letter-spacing: -0.02em;
-    animation: fadeUp .8s .15s ease both;
-  }
+/* contact illustration */
+.contact-illustration{margin-bottom:2.5rem;}
+.contact-illustration svg{width:100%;max-width:300px;filter:drop-shadow(0 15px 35px rgba(201,169,110,.18));}
 
-  .hero-name span { color: var(--accent); }
+/* ── FOOTER ── */
+footer{
+  padding:2rem clamp(1.2rem,5vw,4rem);
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:1rem;
+}
+footer p{font-size:.78rem;color:var(--muted);}
+.footer-badge{
+  background:rgba(201,169,110,.08);border:1px solid rgba(201,169,110,.15);
+  color:var(--accent);padding:.25rem .8rem;border-radius:50px;
+  font-size:.7rem;letter-spacing:.1em;
+}
 
-  .hero-title {
-    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-    color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase;
-    margin: 1.5rem 0 2.5rem;
-    animation: fadeUp .8s .3s ease both;
-  }
-
-  .hero-desc {
-    max-width: 540px;
-    font-size: clamp(0.95rem, 2vw, 1.1rem);
-    color: rgba(240,236,228,0.75);
-    margin-bottom: 2.5rem;
-    animation: fadeUp .8s .45s ease both;
-  }
-  .hero-desc strong { color: var(--accent2); font-weight: 400; }
-
-  .hero-btns {
-    display: flex; flex-wrap: wrap; gap: 1rem;
-    animation: fadeUp .8s .6s ease both;
-  }
-
-  .btn-primary {
-    background: var(--accent); color: #0d0d0d;
-    padding: .85rem 2rem; border-radius: 50px;
-    font-size: .9rem; font-weight: 500; letter-spacing: 0.04em;
-    text-decoration: none; transition: background .25s, transform .2s;
-  }
-  .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); }
-
-  .btn-outline {
-    border: 1px solid rgba(255,255,255,0.2); color: var(--text);
-    padding: .85rem 2rem; border-radius: 50px;
-    font-size: .9rem; letter-spacing: 0.04em;
-    text-decoration: none; transition: border-color .25s, transform .2s;
-  }
-  .btn-outline:hover { border-color: var(--accent); transform: translateY(-2px); }
-
-  /* stats strip */
-  .hero-stats {
-    display: flex; flex-wrap: wrap; gap: 2rem; margin-top: 4rem;
-    animation: fadeUp .8s .75s ease both;
-  }
-  .stat { display: flex; flex-direction: column; gap: .2rem; }
-  .stat-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 2rem; font-weight: 700; color: var(--accent);
-    line-height: 1;
-  }
-  .stat-label { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
-
-  /* ─── SECTIONS ─── */
-  section { padding: clamp(4rem, 10vw, 8rem) clamp(1.2rem, 5vw, 4rem); }
-
-  .section-tag {
-    font-size: .72rem; letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 1rem;
-  }
-
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    font-weight: 700; line-height: 1.1;
-    margin-bottom: clamp(2.5rem, 6vw, 4rem);
-  }
-  .section-title em { color: var(--accent); font-style: italic; }
-
-  /* ─── ABOUT ─── */
-  #about { background: var(--surface); }
-
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: clamp(2rem, 5vw, 5rem);
-    align-items: start;
-  }
-
-  @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } }
-
-  .about-text p {
-    font-size: clamp(0.95rem, 2vw, 1.05rem);
-    color: rgba(240,236,228,0.75);
-    margin-bottom: 1.2rem;
-  }
-  .about-text strong { color: var(--accent2); font-weight: 400; }
-
-  .info-cards { display: flex; flex-direction: column; gap: 1rem; }
-
-  .info-card {
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 1.2rem 1.4rem;
-    display: flex; align-items: flex-start; gap: 1rem;
-    transition: border-color .25s;
-  }
-  .info-card:hover { border-color: rgba(201,169,110,0.25); }
-
-  .info-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: .1rem; }
-  .info-card h4 { font-size: .9rem; font-weight: 500; color: var(--text); }
-  .info-card p { font-size: .8rem; color: var(--muted); margin: .2rem 0 0; }
-
-  /* toolkit grid */
-  .toolkit { margin-top: 2.5rem; }
-  .toolkit h3 { font-size: .72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
-  .toolkit-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: .8rem;
-  }
-  .tool-pill {
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 8px; padding: .6rem .8rem;
-    font-size: .8rem; color: var(--text); text-align: center;
-    display: flex; flex-direction: column; align-items: center; gap: .3rem;
-    transition: border-color .25s, transform .2s;
-  }
-  .tool-pill:hover { border-color: rgba(201,169,110,0.3); transform: translateY(-2px); }
-  .tool-pill .tool-emoji { font-size: 1.2rem; }
-  .tool-pill .tool-sub { font-size: .68rem; color: var(--muted); }
-
-  /* ─── SKILLS ─── */
-  #skills { background: var(--bg); }
-
-  .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1.2rem;
-  }
-
-  .skill-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 1.8rem;
-    transition: border-color .25s, transform .3s;
-    position: relative; overflow: hidden;
-  }
-  .skill-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    opacity: 0; transition: opacity .3s;
-  }
-  .skill-card:hover { border-color: rgba(201,169,110,0.25); transform: translateY(-4px); }
-  .skill-card:hover::before { opacity: 1; }
-
-  .skill-icon { font-size: 2rem; margin-bottom: 1rem; }
-  .skill-card h3 { font-size: 1rem; font-weight: 500; margin-bottom: 1rem; }
-  .skill-tags { display: flex; flex-wrap: wrap; gap: .5rem; }
-  .tag {
-    background: rgba(201,169,110,0.08); border: 1px solid rgba(201,169,110,0.15);
-    color: var(--accent2); padding: .2rem .6rem; border-radius: 4px;
-    font-size: .72rem; letter-spacing: 0.05em;
-  }
-
-  /* ─── EXPERIENCE ─── */
-  #experience { background: var(--surface); }
-
-  .timeline { position: relative; padding-left: 2rem; }
-  .timeline::before {
-    content: ''; position: absolute; left: 0; top: 8px; bottom: 8px;
-    width: 1px; background: var(--border);
-  }
-
-  .timeline-item {
-    position: relative; margin-bottom: 3rem;
-    padding-left: 1.5rem;
-  }
-  .timeline-item::before {
-    content: ''; position: absolute; left: -2.35rem; top: 6px;
-    width: 10px; height: 10px; border-radius: 50%;
-    background: var(--accent); box-shadow: 0 0 0 4px rgba(201,169,110,0.15);
-  }
-
-  .timeline-meta {
-    display: flex; align-items: center; gap: .8rem; flex-wrap: wrap;
-    margin-bottom: .6rem;
-  }
-  .timeline-badge {
-    background: rgba(201,169,110,0.1); border: 1px solid rgba(201,169,110,0.2);
-    color: var(--accent); padding: .2rem .7rem; border-radius: 4px;
-    font-size: .7rem; letter-spacing: 0.1em; text-transform: uppercase;
-  }
-  .timeline-date { font-size: .78rem; color: var(--muted); }
-
-  .timeline-item h3 { font-size: 1.1rem; font-weight: 500; margin-bottom: .3rem; }
-  .timeline-item .company { font-size: .85rem; color: var(--accent); margin-bottom: .8rem; }
-  .timeline-item ul { padding-left: 1.2rem; }
-  .timeline-item li { font-size: .88rem; color: rgba(240,236,228,0.7); margin-bottom: .4rem; }
-
-  /* ─── PROJECTS ─── */
-  #projects { background: var(--bg); }
-
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.2rem;
-  }
-
-  .project-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 2rem;
-    display: flex; flex-direction: column;
-    transition: border-color .25s, transform .3s;
-    position: relative; overflow: hidden;
-  }
-  .project-card::after {
-    content: ''; position: absolute; inset: 0;
-    background: radial-gradient(circle at 80% 20%, rgba(201,169,110,0.04), transparent 60%);
-    pointer-events: none;
-  }
-  .project-card:hover { border-color: rgba(201,169,110,0.3); transform: translateY(-5px); }
-
-  .project-icon { font-size: 2.2rem; margin-bottom: 1.2rem; }
-  .project-card h3 { font-size: 1rem; font-weight: 500; margin-bottom: .7rem; }
-  .project-card p { font-size: .85rem; color: rgba(240,236,228,0.65); flex: 1; margin-bottom: 1.2rem; }
-  .project-tags { display: flex; flex-wrap: wrap; gap: .5rem; }
-
-  /* ─── EDUCATION ─── */
-  #education { background: var(--surface); }
-
-  .edu-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.2rem;
-  }
-
-  .edu-card {
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 1.5rem 1.8rem;
-    transition: border-color .25s;
-  }
-  .edu-card:hover { border-color: rgba(201,169,110,0.25); }
-
-  .edu-card .edu-icon { font-size: 1.5rem; margin-bottom: .8rem; }
-  .edu-card h3 { font-size: .95rem; font-weight: 500; margin-bottom: .3rem; }
-  .edu-card .institute { font-size: .8rem; color: var(--accent); margin-bottom: .5rem; }
-  .edu-card .edu-meta { font-size: .78rem; color: var(--muted); }
-
-  /* ─── CONTACT ─── */
-  #contact {
-    background: var(--bg);
-    text-align: center;
-  }
-
-  .contact-inner { max-width: 600px; margin: 0 auto; }
-
-  .contact-inner .section-title { margin-bottom: 1rem; }
-  .contact-sub { color: rgba(240,236,228,0.6); margin-bottom: 3rem; font-size: .95rem; }
-
-  .contact-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem; margin-bottom: 3rem;
-  }
-
-  .contact-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 1.5rem;
-    text-decoration: none; color: var(--text);
-    transition: border-color .25s, transform .2s;
-    display: flex; flex-direction: column; align-items: center; gap: .5rem;
-  }
-  .contact-card:hover { border-color: rgba(201,169,110,0.3); transform: translateY(-3px); }
-  .contact-card .cc-icon { font-size: 1.5rem; }
-  .contact-card .cc-label { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
-  .contact-card .cc-val { font-size: .88rem; color: var(--accent2); }
-
-  .contact-location {
-    display: inline-flex; align-items: center; gap: .5rem;
-    font-size: .85rem; color: var(--muted);
-  }
-
-  /* ─── FOOTER ─── */
-  footer {
-    padding: 2rem clamp(1.2rem, 5vw, 4rem);
-    border-top: 1px solid var(--border);
-    display: flex; justify-content: space-between; align-items: center;
-    flex-wrap: wrap; gap: 1rem;
-  }
-
-  footer p { font-size: .8rem; color: var(--muted); }
-  footer .footer-badge {
-    background: rgba(201,169,110,0.08); border: 1px solid rgba(201,169,110,0.15);
-    color: var(--accent); padding: .25rem .8rem; border-radius: 50px;
-    font-size: .72rem; letter-spacing: 0.1em;
-  }
-
-  /* ─── ANIMATIONS ─── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .reveal {
-    opacity: 0; transform: translateY(28px);
-    transition: opacity .7s ease, transform .7s ease;
-  }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-
-  /* scrollbar */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-
-  /* selection */
-  ::selection { background: rgba(201,169,110,0.3); }
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:#2a2a35;border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--accent);}
+::selection{background:rgba(201,169,110,.28);}
 </style>
 </head>
 <body>
@@ -462,7 +396,6 @@
     <span></span><span></span><span></span>
   </button>
 </nav>
-
 <div class="mobile-menu" id="mobileMenu">
   <a href="#about" class="mob-link">About</a>
   <a href="#skills" class="mob-link">Skills</a>
@@ -474,19 +407,170 @@
 
 <!-- HERO -->
 <section id="hero">
-  <div class="hero-noise"></div>
-  <div class="hero-tag">Available for Work</div>
-  <h1 class="hero-name">KANCHI<br><span>RAJGOR</span></h1>
-  <p class="hero-title">UI/UX Designer &nbsp;·&nbsp; Figma Expert</p>
-  <p class="hero-desc">Crafting intuitive digital experiences that blend <strong>aesthetics with functionality</strong> — from wireframes to pixel-perfect interfaces.</p>
-  <div class="hero-btns">
-    <a class="btn-primary" href="#projects">View Projects</a>
-    <a class="btn-outline" href="#contact">Contact Me</a>
+  <div class="hero-content">
+    <div class="hero-tag">Available for Work</div>
+    <h1 class="hero-name">KANCHI<br><span>RAJGOR</span></h1>
+    <p class="hero-title">UI/UX Designer &nbsp;·&nbsp; Figma Expert</p>
+    <p class="hero-desc">Crafting intuitive digital experiences that blend <strong>aesthetics with functionality</strong> — from wireframes to pixel-perfect interfaces.</p>
+    <div class="hero-btns">
+      <a class="btn-primary" href="#projects">View Projects</a>
+      <a class="btn-outline" href="#contact">Contact Me</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">2+</span><span class="stat-label">Years Experience</span></div>
+      <div class="stat"><span class="stat-num">4+</span><span class="stat-label">Projects Done</span></div>
+      <div class="stat"><span class="stat-num">9.38</span><span class="stat-label">CGPA</span></div>
+    </div>
   </div>
-  <div class="hero-stats">
-    <div class="stat"><span class="stat-num">2+</span><span class="stat-label">Years Experience</span></div>
-    <div class="stat"><span class="stat-num">4+</span><span class="stat-label">Projects Done</span></div>
-    <div class="stat"><span class="stat-num">9.38</span><span class="stat-label">Academic CGPA</span></div>
+
+  <!-- 3D Hero Illustration: floating design workspace -->
+  <div class="hero-illustration">
+    <svg viewBox="0 0 500 460" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#c9a96e"/>
+          <stop offset="100%" stop-color="#7c6fcd"/>
+        </linearGradient>
+        <linearGradient id="grad2" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#7c6fcd"/>
+          <stop offset="100%" stop-color="#4ecdc4"/>
+        </linearGradient>
+        <linearGradient id="grad3" x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0%" stop-color="#e07fa0"/>
+          <stop offset="100%" stop-color="#c9a96e"/>
+        </linearGradient>
+        <linearGradient id="screenGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1a1a2e"/>
+          <stop offset="100%" stop-color="#0d0d18"/>
+        </linearGradient>
+        <filter id="glow1">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="shadow3d">
+          <feDropShadow dx="4" dy="8" stdDeviation="6" flood-color="rgba(0,0,0,.5)"/>
+        </filter>
+      </defs>
+
+      <!-- spinning outer ring -->
+      <g class="ill-ring">
+        <circle cx="250" cy="230" r="195" fill="none" stroke="rgba(201,169,110,.12)" stroke-width="1" stroke-dasharray="6 14"/>
+      </g>
+
+      <!-- glow orbs background -->
+      <circle cx="370" cy="100" r="55" fill="rgba(124,111,205,.15)"/>
+      <circle cx="130" cy="340" r="40" fill="rgba(201,169,110,.12)"/>
+      <circle cx="400" cy="360" r="30" fill="rgba(78,205,196,.1)"/>
+
+      <!-- 3D Laptop / monitor body -->
+      <g class="ill-main" filter="url(#shadow3d)">
+        <!-- monitor base isometric -->
+        <ellipse cx="250" cy="400" rx="110" ry="18" fill="rgba(201,169,110,.15)"/>
+        <!-- stand -->
+        <rect x="238" y="355" width="24" height="40" rx="4" fill="#2a2a3e"/>
+        <rect x="218" y="390" width="64" height="10" rx="5" fill="#1e1e2e"/>
+        <!-- monitor outer bezel -->
+        <rect x="88" y="115" width="324" height="245" rx="16" fill="#1a1a2e" stroke="rgba(201,169,110,.25)" stroke-width="1.5"/>
+        <!-- screen -->
+        <rect x="100" y="126" width="300" height="222" rx="10" fill="url(#screenGrad)"/>
+        <!-- screen glow top -->
+        <rect x="100" y="126" width="300" height="4" rx="2" fill="rgba(201,169,110,.3)"/>
+
+        <!-- UI on screen: nav bar -->
+        <rect x="108" y="132" width="284" height="22" rx="4" fill="#14142a"/>
+        <circle cx="122" cy="143" r="4" fill="#e07fa0" opacity=".8"/>
+        <circle cx="135" cy="143" r="4" fill="#c9a96e" opacity=".8"/>
+        <circle cx="148" cy="143" r="4" fill="#4ecdc4" opacity=".8"/>
+        <rect x="165" y="138" width="60" height="10" rx="3" fill="rgba(255,255,255,.1)"/>
+        <rect x="320" y="138" width="60" height="10" rx="3" fill="rgba(201,169,110,.3)"/>
+
+        <!-- hero section on screen -->
+        <rect x="108" y="160" width="172" height="18" rx="3" fill="rgba(255,255,255,.06)"/>
+        <rect x="108" y="182" width="140" height="10" rx="3" fill="rgba(255,255,255,.08)"/>
+        <rect x="108" y="196" width="155" height="10" rx="3" fill="rgba(255,255,255,.05)"/>
+        <rect x="108" y="214" width="80" height="22" rx="11" fill="rgba(201,169,110,.6)"/>
+        <rect x="196" y="214" width="70" height="22" rx="11" fill="rgba(124,111,205,.3)" stroke="rgba(124,111,205,.5)" stroke-width="1"/>
+
+        <!-- mockup image block on screen -->
+        <rect x="294" y="158" width="96" height="82" rx="8" fill="#14142a" stroke="rgba(124,111,205,.3)" stroke-width="1"/>
+        <rect x="302" y="164" width="80" height="50" rx="5" fill="rgba(124,111,205,.2)"/>
+        <circle cx="342" cy="189" r="16" fill="rgba(201,169,110,.25)"/>
+        <rect x="306" y="220" width="72" height="6" rx="3" fill="rgba(255,255,255,.08)"/>
+        <rect x="316" y="230" width="52" height="5" rx="2.5" fill="rgba(255,255,255,.05)"/>
+
+        <!-- bottom bar on screen -->
+        <rect x="108" y="248" width="284" height="1" fill="rgba(255,255,255,.05)"/>
+        <rect x="108" y="256" width="50" height="8" rx="3" fill="rgba(255,255,255,.06)"/>
+        <rect x="166" y="256" width="50" height="8" rx="3" fill="rgba(255,255,255,.05)"/>
+        <rect x="222" y="256" width="50" height="8" rx="3" fill="rgba(255,255,255,.05)"/>
+        <rect x="330" y="252" width="56" height="16" rx="8" fill="rgba(201,169,110,.4)"/>
+
+        <!-- colour swatch row -->
+        <circle cx="118" cy="326" r="7" fill="#c9a96e"/>
+        <circle cx="136" cy="326" r="7" fill="#7c6fcd"/>
+        <circle cx="154" cy="326" r="7" fill="#4ecdc4"/>
+        <circle cx="172" cy="326" r="7" fill="#e07fa0"/>
+        <circle cx="190" cy="326" r="7" fill="#f0ece4"/>
+        <rect x="108" y="316" width="88" height="20" rx="5" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+        <!-- layer panel -->
+        <rect x="260" y="305" width="124" height="35" rx="6" fill="#14142a"/>
+        <rect x="268" y="312" width="60" height="8" rx="3" fill="rgba(255,255,255,.08)"/>
+        <rect x="268" y="324" width="42" height="6" rx="3" fill="rgba(201,169,110,.3)"/>
+        <rect x="336" y="312" width="40" height="6" rx="3" fill="rgba(124,111,205,.35)"/>
+        <rect x="336" y="322" width="40" height="6" rx="3" fill="rgba(78,205,196,.25)"/>
+      </g>
+
+      <!-- floating card 1: colour palette -->
+      <g class="ill-card1" filter="url(#shadow3d)">
+        <rect x="30" y="150" width="110" height="80" rx="14" fill="#1e1e30" stroke="rgba(201,169,110,.3)" stroke-width="1.2"/>
+        <rect x="44" y="163" width="82" height="38" rx="8" fill="#14142a"/>
+        <circle cx="56" cy="181" r="8" fill="url(#grad1)"/>
+        <circle cx="74" cy="181" r="8" fill="url(#grad2)"/>
+        <circle cx="92" cy="181" r="8" fill="url(#grad3)"/>
+        <circle cx="110" cy="181" r="8" fill="#f0ece4" opacity=".7"/>
+        <rect x="44" y="208" width="60" height="8" rx="4" fill="rgba(255,255,255,.1)"/>
+        <rect x="44" y="220" width="40" height="6" rx="3" fill="rgba(201,169,110,.3)"/>
+      </g>
+
+      <!-- floating card 2: mobile wireframe -->
+      <g class="ill-card2" filter="url(#shadow3d)">
+        <rect x="368" y="180" width="90" height="140" rx="16" fill="#1e1e30" stroke="rgba(124,111,205,.4)" stroke-width="1.2"/>
+        <rect x="376" y="196" width="74" height="108" rx="8" fill="#14142a"/>
+        <!-- status bar -->
+        <rect x="381" y="200" width="64" height="6" rx="3" fill="rgba(255,255,255,.06)"/>
+        <!-- big banner -->
+        <rect x="381" y="210" width="64" height="32" rx="5" fill="rgba(124,111,205,.2)"/>
+        <circle cx="413" cy="226" r="9" fill="rgba(201,169,110,.35)"/>
+        <!-- rows -->
+        <rect x="381" y="248" width="64" height="8" rx="3" fill="rgba(255,255,255,.07)"/>
+        <rect x="381" y="260" width="50" height="6" rx="3" fill="rgba(255,255,255,.05)"/>
+        <rect x="381" y="274" width="58" height="6" rx="3" fill="rgba(255,255,255,.05)"/>
+        <!-- bottom tab bar -->
+        <rect x="376" y="292" width="74" height="16" rx="0 0 6 6" fill="#14142a"/>
+        <circle cx="397" cy="300" r="3" fill="rgba(201,169,110,.6)"/>
+        <circle cx="413" cy="300" r="3" fill="rgba(255,255,255,.2)"/>
+        <circle cx="429" cy="300" r="3" fill="rgba(255,255,255,.2)"/>
+        <!-- notch -->
+        <rect x="400" y="190" width="20" height="5" rx="2.5" fill="#0a0a0f"/>
+      </g>
+
+      <!-- floating orb: figma-like icon -->
+      <g class="ill-orb">
+        <circle cx="80" cy="280" r="32" fill="#1e1e30" stroke="rgba(201,169,110,.25)" stroke-width="1"/>
+        <!-- figma-style mark -->
+        <circle cx="80" cy="280" r="10" fill="rgba(201,169,110,.5)"/>
+        <path d="M73 271 Q80 265 87 271 L87 280 L73 280 Z" fill="rgba(224,127,160,.6)"/>
+        <path d="M73 280 L87 280 Q87 289 80 289 Q73 289 73 280 Z" fill="rgba(124,111,205,.6)"/>
+        <circle cx="88" cy="275" r="5" fill="rgba(78,205,196,.6)"/>
+      </g>
+
+      <!-- sparkle dots -->
+      <circle cx="160" cy="95" r="2.5" fill="url(#grad1)" opacity=".7" filter="url(#glow1)"/>
+      <circle cx="340" cy="75" r="2" fill="url(#grad2)" opacity=".6" filter="url(#glow1)"/>
+      <circle cx="450" cy="280" r="3" fill="#e07fa0" opacity=".5" filter="url(#glow1)"/>
+      <circle cx="55" cy="430" r="2.5" fill="url(#grad1)" opacity=".5" filter="url(#glow1)"/>
+      <circle cx="430" cy="430" r="2" fill="#4ecdc4" opacity=".5" filter="url(#glow1)"/>
+    </svg>
   </div>
 </section>
 
@@ -511,27 +595,73 @@
         </div>
       </div>
     </div>
-    <div class="info-cards">
-      <div class="info-card">
-        <span class="info-icon">🎓</span>
-        <div>
-          <h4>MCA — Saurashtra University</h4>
-          <p>CGPA 8.53 · 2023 – 2025</p>
-        </div>
+    <div>
+      <!-- 3D About Illustration: isometric workspace -->
+      <div class="about-illustration">
+        <svg viewBox="0 0 420 320" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="deskGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#2a2a3e"/>
+              <stop offset="100%" stop-color="#1a1a2e"/>
+            </linearGradient>
+          </defs>
+          <!-- desk surface isometric -->
+          <ellipse cx="210" cy="280" rx="175" ry="28" fill="rgba(201,169,110,.08)"/>
+          <!-- desk top -->
+          <polygon points="45,210 210,255 375,210 210,165" fill="url(#deskGrad)" stroke="rgba(201,169,110,.15)" stroke-width="1"/>
+          <!-- desk front left -->
+          <polygon points="45,210 45,240 210,285 210,255" fill="#151522" stroke="rgba(201,169,110,.1)" stroke-width="1"/>
+          <!-- desk front right -->
+          <polygon points="210,255 210,285 375,240 375,210" fill="#1a1a2e" stroke="rgba(201,169,110,.1)" stroke-width="1"/>
+
+          <!-- monitor on desk -->
+          <rect x="162" y="108" width="96" height="72" rx="6" fill="#1e1e30" stroke="rgba(201,169,110,.3)" stroke-width="1.2"/>
+          <rect x="168" y="114" width="84" height="56" rx="4" fill="#0d0d18"/>
+          <!-- screen content -->
+          <rect x="172" y="118" width="76" height="12" rx="3" fill="#14142a"/>
+          <rect x="176" y="134" width="40" height="8" rx="2" fill="rgba(124,111,205,.35)"/>
+          <rect x="176" y="146" width="55" height="5" rx="2" fill="rgba(255,255,255,.07)"/>
+          <rect x="176" y="155" width="45" height="5" rx="2" fill="rgba(255,255,255,.05)"/>
+          <rect x="228" y="134" width="14" height="30" rx="3" fill="rgba(201,169,110,.3)"/>
+          <!-- monitor stand -->
+          <rect x="204" y="180" width="12" height="16" rx="2" fill="#2a2a3e"/>
+          <rect x="196" y="194" width="28" height="6" rx="3" fill="#1e1e30"/>
+
+          <!-- Figma tool panel (left side) -->
+          <rect x="90" y="170" width="58" height="68" rx="8" fill="#1e1e30" stroke="rgba(124,111,205,.25)" stroke-width="1"/>
+          <rect x="98" y="178" width="42" height="30" rx="5" fill="#14142a"/>
+          <circle cx="108" cy="192" r="6" fill="rgba(201,169,110,.5)"/>
+          <circle cx="122" cy="192" r="6" fill="rgba(124,111,205,.5)"/>
+          <rect x="98" y="215" width="42" height="7" rx="3" fill="rgba(255,255,255,.07)"/>
+          <rect x="98" y="226" width="30" height="6" rx="3" fill="rgba(201,169,110,.3)"/>
+
+          <!-- coffee cup -->
+          <rect x="306" y="182" width="28" height="24" rx="4" fill="#2a2a3e" stroke="rgba(78,205,196,.25)" stroke-width="1"/>
+          <rect x="310" y="178" width="20" height="6" rx="3" fill="#1e1e30"/>
+          <ellipse cx="320" cy="186" rx="10" ry="3" fill="rgba(78,205,196,.15)"/>
+          <!-- steam -->
+          <path d="M315 175 Q317 170 315 165" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M321 173 Q323 168 321 163" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="1.5" stroke-linecap="round"/>
+
+          <!-- pencil -->
+          <rect x="265" y="200" width="5" height="38" rx="2.5" fill="#c9a96e" transform="rotate(-20 268 219)"/>
+          <polygon points="265,235 270,235 267.5,244" fill="#f0ece4" transform="rotate(-20 268 230)"/>
+
+          <!-- small sticky notes -->
+          <rect x="340" y="168" width="28" height="28" rx="3" fill="rgba(224,127,160,.5)" transform="rotate(5 354 182)"/>
+          <rect x="348" y="174" width="14" height="3" rx="1.5" fill="rgba(255,255,255,.4)" transform="rotate(5 354 182)"/>
+          <rect x="348" y="180" width="10" height="3" rx="1.5" fill="rgba(255,255,255,.3)" transform="rotate(5 354 182)"/>
+
+          <!-- sparkles -->
+          <circle cx="58" cy="155" r="2.5" fill="#c9a96e" opacity=".6"/>
+          <circle cx="380" cy="145" r="2" fill="#7c6fcd" opacity=".6"/>
+          <circle cx="140" cy="100" r="2" fill="#4ecdc4" opacity=".5"/>
+        </svg>
       </div>
-      <div class="info-card">
-        <span class="info-icon">💼</span>
-        <div>
-          <h4>UI/UX Designer @ Make it Special LDA</h4>
-          <p>Current Position</p>
-        </div>
-      </div>
-      <div class="info-card">
-        <span class="info-icon">📍</span>
-        <div>
-          <h4>Bhuj-Rajkot, Gujarat, India</h4>
-          <p>Open to remote opportunities</p>
-        </div>
+      <div class="info-cards">
+        <div class="info-card"><span class="info-icon">🎓</span><div><h4>MCA — Saurashtra University</h4><p>CGPA 8.53 · 2023 – 2025</p></div></div>
+        <div class="info-card"><span class="info-icon">💼</span><div><h4>UI/UX Designer @ Make it Special LDA</h4><p>Current Position</p></div></div>
+        <div class="info-card"><span class="info-icon">📍</span><div><h4>Bhuj-Rajkot, Gujarat, India</h4><p>Open to remote opportunities</p></div></div>
       </div>
     </div>
   </div>
@@ -543,54 +673,51 @@
     <p class="section-tag">What I Do</p>
     <h2 class="section-title">Skills &amp; <em>Expertise</em></h2>
   </div>
+  <!-- 3D skills deco: floating geometric shapes -->
+  <div class="skills-deco reveal">
+    <svg viewBox="0 0 380 120" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="cubeG1" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#c9a96e" stop-opacity=".9"/>
+          <stop offset="100%" stop-color="#7c6fcd" stop-opacity=".7"/>
+        </linearGradient>
+        <linearGradient id="cubeG2" x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0%" stop-color="#4ecdc4" stop-opacity=".8"/>
+          <stop offset="100%" stop-color="#e07fa0" stop-opacity=".7"/>
+        </linearGradient>
+      </defs>
+      <!-- isometric cube 1 -->
+      <g transform="translate(40,20)">
+        <polygon points="30,0 60,17 60,52 30,35" fill="url(#cubeG1)" opacity=".9"/>
+        <polygon points="0,17 30,0 30,35 0,52" fill="rgba(201,169,110,.5)"/>
+        <polygon points="0,52 30,35 60,52 30,69" fill="rgba(124,111,205,.4)"/>
+      </g>
+      <!-- isometric cube 2 (smaller) -->
+      <g transform="translate(130,35)">
+        <polygon points="18,0 36,10 36,31 18,21" fill="url(#cubeG2)" opacity=".8"/>
+        <polygon points="0,10 18,0 18,21 0,31" fill="rgba(78,205,196,.5)"/>
+        <polygon points="0,31 18,21 36,31 18,41" fill="rgba(224,127,160,.4)"/>
+      </g>
+      <!-- sphere (circle with gradient glow) -->
+      <circle cx="230" cy="58" r="36" fill="rgba(124,111,205,.12)" stroke="rgba(124,111,205,.3)" stroke-width="1.5"/>
+      <circle cx="230" cy="58" r="26" fill="rgba(124,111,205,.18)" stroke="rgba(124,111,205,.4)" stroke-width="1"/>
+      <circle cx="222" cy="50" r="8" fill="rgba(255,255,255,.12)"/>
+      <!-- torus-like ring -->
+      <ellipse cx="320" cy="60" rx="38" ry="16" fill="none" stroke="url(#cubeG1)" stroke-width="3" opacity=".7"/>
+      <ellipse cx="320" cy="60" rx="28" ry="10" fill="none" stroke="rgba(201,169,110,.25)" stroke-width="1.5"/>
+      <!-- dots -->
+      <circle cx="100" cy="25" r="3" fill="#c9a96e" opacity=".5"/>
+      <circle cx="175" cy="95" r="2.5" fill="#4ecdc4" opacity=".5"/>
+      <circle cx="365" cy="30" r="2" fill="#e07fa0" opacity=".5"/>
+    </svg>
+  </div>
   <div class="skills-grid reveal">
-    <div class="skill-card">
-      <div class="skill-icon">🎨</div>
-      <h3>UI/UX Design</h3>
-      <div class="skill-tags">
-        <span class="tag">Wireframing</span><span class="tag">Prototyping</span>
-        <span class="tag">User Research</span><span class="tag">Design Systems</span>
-      </div>
-    </div>
-    <div class="skill-card">
-      <div class="skill-icon">💻</div>
-      <h3>Front-End Dev</h3>
-      <div class="skill-tags">
-        <span class="tag">HTML</span><span class="tag">CSS</span>
-        <span class="tag">JavaScript</span><span class="tag">Responsive</span>
-      </div>
-    </div>
-    <div class="skill-card">
-      <div class="skill-icon">🛠️</div>
-      <h3>Programming</h3>
-      <div class="skill-tags">
-        <span class="tag">Python</span><span class="tag">Java</span>
-        <span class="tag">C/C++</span><span class="tag">PHP</span><span class="tag">C#</span>
-      </div>
-    </div>
-    <div class="skill-card">
-      <div class="skill-icon">🗄️</div>
-      <h3>Database</h3>
-      <div class="skill-tags">
-        <span class="tag">SQL</span><span class="tag">MySQL</span><span class="tag">Oracle</span>
-      </div>
-    </div>
-    <div class="skill-card">
-      <div class="skill-icon">🤝</div>
-      <h3>Soft Skills</h3>
-      <div class="skill-tags">
-        <span class="tag">Communication</span><span class="tag">Team Work</span>
-        <span class="tag">Documentation</span><span class="tag">Scheduling</span>
-      </div>
-    </div>
-    <div class="skill-card">
-      <div class="skill-icon">⚙️</div>
-      <h3>Tools &amp; IDEs</h3>
-      <div class="skill-tags">
-        <span class="tag">VS Code</span><span class="tag">Android Studio</span>
-        <span class="tag">Visual Studio</span><span class="tag">MS Office</span>
-      </div>
-    </div>
+    <div class="skill-card"><div class="skill-icon">🎨</div><h3>UI/UX Design</h3><div class="skill-tags"><span class="tag">Wireframing</span><span class="tag">Prototyping</span><span class="tag">User Research</span><span class="tag">Design Systems</span></div></div>
+    <div class="skill-card"><div class="skill-icon">💻</div><h3>Front-End Dev</h3><div class="skill-tags"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><span class="tag">Responsive</span></div></div>
+    <div class="skill-card"><div class="skill-icon">🛠️</div><h3>Programming</h3><div class="skill-tags"><span class="tag">Python</span><span class="tag">Java</span><span class="tag">C/C++</span><span class="tag">PHP</span><span class="tag">C#</span></div></div>
+    <div class="skill-card"><div class="skill-icon">🗄️</div><h3>Database</h3><div class="skill-tags"><span class="tag">SQL</span><span class="tag">MySQL</span><span class="tag">Oracle</span></div></div>
+    <div class="skill-card"><div class="skill-icon">🤝</div><h3>Soft Skills</h3><div class="skill-tags"><span class="tag">Communication</span><span class="tag">Team Work</span><span class="tag">Documentation</span><span class="tag">Scheduling</span></div></div>
+    <div class="skill-card"><div class="skill-icon">⚙️</div><h3>Tools &amp; IDEs</h3><div class="skill-tags"><span class="tag">VS Code</span><span class="tag">Android Studio</span><span class="tag">Visual Studio</span><span class="tag">MS Office</span></div></div>
   </div>
 </section>
 
@@ -600,32 +727,84 @@
     <p class="section-tag">Career</p>
     <h2 class="section-title">Experience &amp; <em>Journey</em></h2>
   </div>
-  <div class="timeline reveal">
-    <div class="timeline-item">
-      <div class="timeline-meta">
-        <span class="timeline-badge">Present</span>
-        <span class="timeline-date">📅 Current</span>
+  <div class="exp-layout reveal">
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-meta"><span class="timeline-badge">Present</span><span class="timeline-date">📅 Current</span></div>
+        <h3>🚀 UI/UX Designer</h3>
+        <p class="company">Make it Special LDA</p>
+        <ul>
+          <li>Designing user interfaces and improving UX for web and mobile applications.</li>
+          <li>Collaborating with developers and cross-functional teams for seamless delivery.</li>
+          <li>Creating wireframes, prototypes, and scalable design systems.</li>
+        </ul>
       </div>
-      <h3>🚀 UI/UX Designer</h3>
-      <p class="company">Make it Special LDA</p>
-      <ul>
-        <li>Designing user interfaces and improving UX for web and mobile applications.</li>
-        <li>Collaborating with developers and cross-functional teams for seamless delivery.</li>
-        <li>Creating wireframes, prototypes, and scalable design systems.</li>
-      </ul>
+      <div class="timeline-item">
+        <div class="timeline-meta"><span class="timeline-badge">Internship</span><span class="timeline-date">📅 Dec 2024 – Apr 2025</span></div>
+        <h3>💡 Software Developer Intern</h3>
+        <p class="company">Make it Special LDA</p>
+        <ul>
+          <li>Worked on UI/UX design and front-end development projects.</li>
+          <li>Assisted in building responsive and user-friendly interfaces.</li>
+          <li>Gained hands-on experience in real-world product development lifecycle.</li>
+        </ul>
+      </div>
     </div>
-    <div class="timeline-item">
-      <div class="timeline-meta">
-        <span class="timeline-badge">Internship</span>
-        <span class="timeline-date">📅 Dec 2024 – Apr 2025</span>
-      </div>
-      <h3>💡 Software Developer Intern</h3>
-      <p class="company">Make it Special LDA</p>
-      <ul>
-        <li>Worked on UI/UX design and front-end development projects.</li>
-        <li>Assisted in building responsive and user-friendly interfaces.</li>
-        <li>Gained hands-on experience in real-world product development lifecycle.</li>
-      </ul>
+    <!-- 3D Experience Illustration: rocket / growth -->
+    <div class="exp-illustration">
+      <svg viewBox="0 0 300 340" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="rocketGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#c9a96e"/>
+            <stop offset="100%" stop-color="#7c6fcd"/>
+          </linearGradient>
+          <linearGradient id="flameGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#e07fa0"/>
+            <stop offset="100%" stop-color="#c9a96e" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <!-- background glow -->
+        <circle cx="150" cy="160" r="120" fill="rgba(124,111,205,.06)"/>
+        <circle cx="150" cy="160" r="80" fill="rgba(201,169,110,.06)"/>
+        <!-- orbit ring -->
+        <ellipse cx="150" cy="160" rx="115" ry="40" fill="none" stroke="rgba(201,169,110,.12)" stroke-width="1.5" stroke-dasharray="5 10" transform="rotate(-20 150 160)"/>
+
+        <!-- rocket body -->
+        <g transform="translate(150,155) rotate(-30)">
+          <!-- flame -->
+          <ellipse cx="0" cy="70" rx="12" ry="28" fill="url(#flameGrad)" opacity=".8"/>
+          <ellipse cx="0" cy="62" rx="6" ry="14" fill="rgba(255,200,100,.6)"/>
+          <!-- body -->
+          <rect x="-18" y="0" width="36" height="60" rx="8" fill="url(#rocketGrad)"/>
+          <!-- nose -->
+          <path d="M-18,0 Q0,-35 18,0 Z" fill="#c9a96e"/>
+          <!-- wings -->
+          <polygon points="-18,40 -38,70 -18,60" fill="rgba(124,111,205,.7)"/>
+          <polygon points="18,40 38,70 18,60" fill="rgba(124,111,205,.7)"/>
+          <!-- window -->
+          <circle cx="0" cy="22" r="9" fill="#0d0d18" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
+          <circle cx="0" cy="22" r="5" fill="rgba(78,205,196,.4)"/>
+          <circle cx="-2" cy="20" r="2" fill="rgba(255,255,255,.4)"/>
+        </g>
+
+        <!-- star dots -->
+        <circle cx="50" cy="60" r="2" fill="white" opacity=".4"/>
+        <circle cx="240" cy="80" r="1.5" fill="white" opacity=".3"/>
+        <circle cx="75" cy="260" r="2" fill="#c9a96e" opacity=".5"/>
+        <circle cx="240" cy="250" r="1.5" fill="#7c6fcd" opacity=".5"/>
+        <circle cx="30" cy="160" r="2.5" fill="#4ecdc4" opacity=".4"/>
+        <circle cx="270" cy="170" r="2" fill="#e07fa0" opacity=".4"/>
+        <circle cx="140" cy="310" r="1.5" fill="white" opacity=".3"/>
+
+        <!-- floating badge cards -->
+        <rect x="12" y="100" width="80" height="38" rx="10" fill="#1e1e30" stroke="rgba(201,169,110,.25)" stroke-width="1"/>
+        <rect x="20" y="108" width="36" height="8" rx="3" fill="rgba(201,169,110,.4)"/>
+        <rect x="20" y="120" width="60" height="7" rx="3" fill="rgba(255,255,255,.08)"/>
+
+        <rect x="208" y="220" width="76" height="38" rx="10" fill="#1e1e30" stroke="rgba(124,111,205,.3)" stroke-width="1"/>
+        <rect x="216" y="228" width="32" height="8" rx="3" fill="rgba(124,111,205,.5)"/>
+        <rect x="216" y="240" width="56" height="7" rx="3" fill="rgba(255,255,255,.08)"/>
+      </svg>
     </div>
   </div>
 </section>
@@ -637,38 +816,164 @@
     <h2 class="section-title">Featured <em>Projects</em></h2>
   </div>
   <div class="projects-grid reveal">
+
+    <!-- College Management -->
     <div class="project-card">
-      <div class="project-icon">🏫</div>
+      <div class="project-visual">
+        <svg viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+          <rect width="300" height="110" fill="#0d0d18"/>
+          <!-- grid lines -->
+          <line x1="0" y1="22" x2="300" y2="22" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+          <line x1="0" y1="44" x2="300" y2="44" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+          <line x1="0" y1="66" x2="300" y2="66" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+          <line x1="0" y1="88" x2="300" y2="88" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+          <!-- sidebar -->
+          <rect x="0" y="0" width="55" height="110" fill="rgba(201,169,110,.06)"/>
+          <circle cx="28" cy="20" r="7" fill="rgba(201,169,110,.4)"/>
+          <rect x="10" y="36" width="35" height="6" rx="3" fill="rgba(255,255,255,.1)"/>
+          <rect x="10" y="48" width="35" height="6" rx="3" fill="rgba(201,169,110,.3)"/>
+          <rect x="10" y="60" width="35" height="6" rx="3" fill="rgba(255,255,255,.07)"/>
+          <rect x="10" y="72" width="35" height="6" rx="3" fill="rgba(255,255,255,.07)"/>
+          <!-- main content rows -->
+          <rect x="70" y="14" width="160" height="8" rx="3" fill="rgba(255,255,255,.1)"/>
+          <rect x="70" y="30" width="100" height="6" rx="3" fill="rgba(255,255,255,.07)"/>
+          <!-- QR square -->
+          <rect x="248" y="10" width="40" height="40" rx="4" fill="rgba(201,169,110,.15)" stroke="rgba(201,169,110,.3)" stroke-width="1"/>
+          <rect x="254" y="16" width="10" height="10" rx="1" fill="rgba(201,169,110,.5)"/>
+          <rect x="272" y="16" width="10" height="10" rx="1" fill="rgba(201,169,110,.5)"/>
+          <rect x="254" y="34" width="10" height="10" rx="1" fill="rgba(201,169,110,.5)"/>
+          <rect x="267" y="27" width="6" height="6" rx="1" fill="rgba(201,169,110,.4)"/>
+          <!-- data table rows -->
+          <rect x="70" y="55" width="170" height="8" rx="2" fill="rgba(124,111,205,.2)"/>
+          <rect x="70" y="68" width="170" height="8" rx="2" fill="rgba(255,255,255,.04)"/>
+          <rect x="70" y="81" width="170" height="8" rx="2" fill="rgba(255,255,255,.04)"/>
+          <rect x="70" y="94" width="100" height="8" rx="2" fill="rgba(255,255,255,.04)"/>
+        </svg>
+      </div>
+      <div class="project-icon-wrap">🏫</div>
       <h3>Advanced College Management System</h3>
       <p>Automated college operations including admin, student, teacher, and fee modules. Implemented a QR-based attendance system.</p>
-      <div class="project-tags">
-        <span class="tag">VB.NET</span><span class="tag">MySQL</span><span class="tag">QR System</span>
-      </div>
+      <div class="project-tags"><span class="tag">VB.NET</span><span class="tag">MySQL</span><span class="tag">QR System</span></div>
     </div>
+
+    <!-- Finance App -->
     <div class="project-card">
-      <div class="project-icon">💰</div>
+      <div class="project-visual">
+        <svg viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+          <rect width="300" height="110" fill="#0d0d18"/>
+          <!-- phone frame -->
+          <rect x="95" y="5" width="55" height="100" rx="8" fill="#14142a" stroke="rgba(78,205,196,.3)" stroke-width="1"/>
+          <rect x="100" y="13" width="45" height="74" rx="4" fill="#0d0d18"/>
+          <!-- balance -->
+          <rect x="104" y="18" width="37" height="8" rx="2" fill="rgba(78,205,196,.25)"/>
+          <rect x="107" y="30" width="31" height="6" rx="2" fill="rgba(255,255,255,.08)"/>
+          <!-- chart bars -->
+          <rect x="103" y="55" width="5" height="24" rx="2" fill="rgba(201,169,110,.4)"/>
+          <rect x="111" y="48" width="5" height="31" rx="2" fill="rgba(201,169,110,.6)"/>
+          <rect x="119" y="43" width="5" height="36" rx="2" fill="rgba(201,169,110,.8)"/>
+          <rect x="127" y="51" width="5" height="28" rx="2" fill="rgba(201,169,110,.5)"/>
+          <rect x="135" y="46" width="5" height="33" rx="2" fill="rgba(201,169,110,.7)"/>
+          <!-- bottom nav -->
+          <rect x="95" y="98" width="55" height="10" rx="0 0 8 8" fill="#14142a"/>
+          <circle cx="114" cy="103" r="2.5" fill="rgba(78,205,196,.6)"/>
+          <circle cx="123" cy="103" r="2.5" fill="rgba(255,255,255,.2)"/>
+          <circle cx="132" cy="103" r="2.5" fill="rgba(255,255,255,.2)"/>
+          <!-- side screens -->
+          <rect x="168" y="20" width="45" height="70" rx="8" fill="#14142a" stroke="rgba(124,111,205,.2)" stroke-width="1" opacity=".7"/>
+          <rect x="48" y="20" width="42" height="70" rx="8" fill="#14142a" stroke="rgba(124,111,205,.2)" stroke-width="1" opacity=".5"/>
+          <!-- right screen content -->
+          <rect x="173" y="30" width="35" height="6" rx="2" fill="rgba(124,111,205,.3)" opacity=".8"/>
+          <circle cx="190" cy="52" r="12" fill="rgba(124,111,205,.2)" stroke="rgba(124,111,205,.4)" stroke-width="1" opacity=".8"/>
+          <rect x="174" y="68" width="34" height="5" rx="2" fill="rgba(255,255,255,.06)" opacity=".8"/>
+          <!-- sparkle -->
+          <circle cx="240" cy="30" r="2" fill="#c9a96e" opacity=".5"/>
+          <circle cx="256" cy="75" r="1.5" fill="#7c6fcd" opacity=".5"/>
+          <circle cx="34" cy="60" r="2" fill="#4ecdc4" opacity=".4"/>
+        </svg>
+      </div>
+      <div class="project-icon-wrap">💰</div>
       <h3>Finance Mobile App Design</h3>
       <p>Designed a comprehensive 17-screen mobile application with complete user flow, modules, and interactive prototypes.</p>
-      <div class="project-tags">
-        <span class="tag">Figma</span><span class="tag">Prototyping</span><span class="tag">UI Design</span>
-      </div>
+      <div class="project-tags"><span class="tag">Figma</span><span class="tag">Prototyping</span><span class="tag">UI Design</span></div>
     </div>
+
+    <!-- IT Website -->
     <div class="project-card">
-      <div class="project-icon">🖥️</div>
+      <div class="project-visual">
+        <svg viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+          <rect width="300" height="110" fill="#0d0d18"/>
+          <!-- browser window -->
+          <rect x="10" y="8" width="280" height="94" rx="8" fill="#14142a" stroke="rgba(201,169,110,.2)" stroke-width="1"/>
+          <rect x="10" y="8" width="280" height="20" rx="8 8 0 0" fill="#1e1e30"/>
+          <circle cx="25" cy="18" r="3.5" fill="rgba(224,127,160,.6)"/>
+          <circle cx="37" cy="18" r="3.5" fill="rgba(201,169,110,.6)"/>
+          <circle cx="49" cy="18" r="3.5" fill="rgba(78,205,196,.6)"/>
+          <rect x="64" y="13" width="120" height="10" rx="5" fill="rgba(255,255,255,.06)"/>
+          <rect x="260" y="13" width="22" height="10" rx="5" fill="rgba(201,169,110,.25)"/>
+          <!-- hero area -->
+          <rect x="18" y="32" width="264" height="42" rx="5" fill="#0d0d18"/>
+          <rect x="26" y="40" width="100" height="10" rx="3" fill="rgba(255,255,255,.1)"/>
+          <rect x="26" y="54" width="70" height="8" rx="3" fill="rgba(255,255,255,.06)"/>
+          <rect x="26" y="66" width="50" height="14" rx="7" fill="rgba(201,169,110,.5)"/>
+          <!-- hero image block -->
+          <rect x="196" y="34" width="80" height="38" rx="5" fill="rgba(124,111,205,.15)" stroke="rgba(124,111,205,.2)" stroke-width="1"/>
+          <circle cx="236" cy="53" r="12" fill="rgba(124,111,205,.25)"/>
+          <!-- cards row -->
+          <rect x="18" y="82" width="60" height="16" rx="4" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+          <rect x="85" y="82" width="60" height="16" rx="4" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+          <rect x="152" y="82" width="60" height="16" rx="4" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+          <rect x="220" y="82" width="56" height="16" rx="4" fill="rgba(201,169,110,.1)" stroke="rgba(201,169,110,.2)" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="project-icon-wrap">🖥️</div>
       <h3>IT Company Website Design</h3>
       <p>Created a full website design including all pages, UI components, and a cohesive design system for an IT company.</p>
-      <div class="project-tags">
-        <span class="tag">Figma</span><span class="tag">UX Research</span><span class="tag">Design System</span>
-      </div>
+      <div class="project-tags"><span class="tag">Figma</span><span class="tag">UX Research</span><span class="tag">Design System</span></div>
     </div>
+
+    <!-- UClockit -->
     <div class="project-card">
-      <div class="project-icon">🕐</div>
+      <div class="project-visual">
+        <svg viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+          <rect width="300" height="110" fill="#0d0d18"/>
+          <!-- dashboard grid -->
+          <rect x="10" y="10" width="130" height="42" rx="8" fill="#14142a" stroke="rgba(78,205,196,.2)" stroke-width="1"/>
+          <rect x="150" y="10" width="140" height="42" rx="8" fill="#14142a" stroke="rgba(201,169,110,.2)" stroke-width="1"/>
+          <rect x="10" y="60" width="85" height="42" rx="8" fill="#14142a" stroke="rgba(124,111,205,.2)" stroke-width="1"/>
+          <rect x="103" y="60" width="85" height="42" rx="8" fill="#14142a" stroke="rgba(224,127,160,.2)" stroke-width="1"/>
+          <rect x="196" y="60" width="94" height="42" rx="8" fill="#14142a" stroke="rgba(78,205,196,.2)" stroke-width="1"/>
+          <!-- card 1 content -->
+          <rect x="18" y="18" width="50" height="6" rx="2" fill="rgba(78,205,196,.3)"/>
+          <rect x="18" y="30" width="80" height="12" rx="3" fill="rgba(255,255,255,.08)"/>
+          <rect x="18" y="44" width="40" height="5" rx="2" fill="rgba(78,205,196,.2)"/>
+          <!-- card 2: bar chart -->
+          <rect x="158" y="28" width="6" height="18" rx="2" fill="rgba(201,169,110,.5)"/>
+          <rect x="168" y="22" width="6" height="24" rx="2" fill="rgba(201,169,110,.7)"/>
+          <rect x="178" y="18" width="6" height="28" rx="2" fill="rgba(201,169,110,.9)"/>
+          <rect x="188" y="25" width="6" height="21" rx="2" fill="rgba(201,169,110,.6)"/>
+          <rect x="198" y="20" width="6" height="26" rx="2" fill="rgba(201,169,110,.8)"/>
+          <rect x="208" y="17" width="6" height="29" rx="2" fill="rgba(201,169,110,.9)"/>
+          <rect x="218" y="23" width="6" height="23" rx="2" fill="rgba(201,169,110,.6)"/>
+          <!-- card 3: donut ring -->
+          <circle cx="52" cy="81" r="16" fill="none" stroke="rgba(124,111,205,.4)" stroke-width="5"/>
+          <circle cx="52" cy="81" r="16" fill="none" stroke="rgba(201,169,110,.7)" stroke-width="5" stroke-dasharray="50 51" stroke-dashoffset="0"/>
+          <rect x="22" y="96" width="58" height="4" rx="2" fill="rgba(255,255,255,.06)"/>
+          <!-- card 4 content -->
+          <rect x="111" y="68" width="48" height="6" rx="2" fill="rgba(224,127,160,.3)"/>
+          <rect x="111" y="79" width="68" height="6" rx="2" fill="rgba(255,255,255,.06)"/>
+          <rect x="111" y="89" width="55" height="6" rx="2" fill="rgba(255,255,255,.05)"/>
+          <!-- card 5 content -->
+          <rect x="204" y="68" width="40" height="6" rx="2" fill="rgba(78,205,196,.3)"/>
+          <rect x="204" y="79" width="78" height="6" rx="2" fill="rgba(255,255,255,.06)"/>
+          <rect x="204" y="91" width="50" height="10" rx="5" fill="rgba(78,205,196,.2)" stroke="rgba(78,205,196,.3)" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="project-icon-wrap">🕐</div>
       <h3>UClockit Web &amp; App</h3>
       <p>Ongoing — designing a comprehensive system for administrative automation and performance tracking across web and mobile.</p>
-      <div class="project-tags">
-        <span class="tag">Figma</span><span class="tag">Web Design</span><span class="tag">Ongoing</span>
-      </div>
+      <div class="project-tags"><span class="tag">Figma</span><span class="tag">Web Design</span><span class="tag">Ongoing</span></div>
     </div>
+
   </div>
 </section>
 
@@ -679,36 +984,11 @@
     <h2 class="section-title">Education &amp; <em>Certifications</em></h2>
   </div>
   <div class="edu-grid reveal">
-    <div class="edu-card">
-      <div class="edu-icon">🎓</div>
-      <h3>Master of Computer Applications</h3>
-      <p class="institute">Saurashtra University, Rajkot</p>
-      <p class="edu-meta">2023 – 2025 &nbsp;·&nbsp; CGPA: 8.53</p>
-    </div>
-    <div class="edu-card">
-      <div class="edu-icon">🏫</div>
-      <h3>Bachelor of Computer Applications</h3>
-      <p class="institute">Shree Muktajivan Swamibapa Mahila College, Bhuj</p>
-      <p class="edu-meta">2020 – 2023 &nbsp;·&nbsp; CGPA: 9.38</p>
-    </div>
-    <div class="edu-card">
-      <div class="edu-icon">🎨</div>
-      <h3>UI/UX Design Training</h3>
-      <p class="institute">Internshala</p>
-      <p class="edu-meta">Jul 2023 – Sep 2023</p>
-    </div>
-    <div class="edu-card">
-      <div class="edu-icon">✨</div>
-      <h3>UI/UX Training</h3>
-      <p class="institute">Romin Interactive, Bhuj</p>
-      <p class="edu-meta">May 2024</p>
-    </div>
-    <div class="edu-card">
-      <div class="edu-icon">🐍</div>
-      <h3>Programming with Python</h3>
-      <p class="institute">Internshala</p>
-      <p class="edu-meta">Aug 2024 – Oct 2024</p>
-    </div>
+    <div class="edu-card"><div class="edu-icon">🎓</div><h3>Master of Computer Applications</h3><p class="institute">Saurashtra University, Rajkot</p><p class="edu-meta">2023 – 2025 · CGPA: 8.53</p></div>
+    <div class="edu-card"><div class="edu-icon">🏫</div><h3>Bachelor of Computer Applications</h3><p class="institute">Shree Muktajivan Swamibapa Mahila College, Bhuj</p><p class="edu-meta">2020 – 2023 · CGPA: 9.38</p></div>
+    <div class="edu-card"><div class="edu-icon">🎨</div><h3>UI/UX Design Training</h3><p class="institute">Internshala</p><p class="edu-meta">Jul 2023 – Sep 2023</p></div>
+    <div class="edu-card"><div class="edu-icon">✨</div><h3>UI/UX Training</h3><p class="institute">Romin Interactive, Bhuj</p><p class="edu-meta">May 2024</p></div>
+    <div class="edu-card"><div class="edu-icon">🐍</div><h3>Programming with Python</h3><p class="institute">Internshala</p><p class="edu-meta">Aug 2024 – Oct 2024</p></div>
   </div>
 </section>
 
@@ -719,6 +999,43 @@
       <p class="section-tag">Get In Touch</p>
       <h2 class="section-title">Let's Build<br><em>Something Amazing.</em></h2>
       <p class="contact-sub">Response within 24 hours · Open to remote opportunities</p>
+    </div>
+    <!-- 3D contact illustration: envelope + chat bubbles -->
+    <div class="contact-illustration reveal">
+      <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="envGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#c9a96e" stop-opacity=".8"/>
+            <stop offset="100%" stop-color="#7c6fcd" stop-opacity=".7"/>
+          </linearGradient>
+        </defs>
+        <!-- glow -->
+        <circle cx="150" cy="80" r="80" fill="rgba(201,169,110,.05)"/>
+        <!-- envelope body -->
+        <rect x="65" y="45" width="170" height="110" rx="10" fill="#1e1e30" stroke="rgba(201,169,110,.3)" stroke-width="1.5"/>
+        <!-- envelope flap -->
+        <path d="M65,45 L150,105 L235,45 Z" fill="url(#envGrad)" opacity=".7"/>
+        <line x1="65" y1="155" x2="150" y2="105" stroke="rgba(201,169,110,.3)" stroke-width="1"/>
+        <line x1="235" y1="155" x2="150" y2="105" stroke="rgba(201,169,110,.3)" stroke-width="1"/>
+        <!-- lines in envelope -->
+        <rect x="85" y="118" width="130" height="6" rx="3" fill="rgba(255,255,255,.07)"/>
+        <rect x="95" y="130" width="110" height="6" rx="3" fill="rgba(255,255,255,.05)"/>
+        <rect x="105" y="142" width="90" height="6" rx="3" fill="rgba(255,255,255,.04)"/>
+        <!-- chat bubble right -->
+        <rect x="220" y="20" width="68" height="38" rx="10" fill="#7c6fcd" opacity=".7"/>
+        <polygon points="228,58 220,68 240,58" fill="#7c6fcd" opacity=".7"/>
+        <rect x="228" y="30" width="52" height="6" rx="3" fill="rgba(255,255,255,.3)"/>
+        <rect x="228" y="40" width="36" height="6" rx="3" fill="rgba(255,255,255,.2)"/>
+        <!-- chat bubble left -->
+        <rect x="14" y="28" width="60" height="32" rx="10" fill="#1e1e30" stroke="rgba(201,169,110,.25)" stroke-width="1"/>
+        <polygon points="66,60 74,68 56,60" fill="#1e1e30"/>
+        <rect x="22" y="36" width="44" height="5" rx="2.5" fill="rgba(255,255,255,.1)"/>
+        <rect x="22" y="45" width="32" height="5" rx="2.5" fill="rgba(201,169,110,.3)"/>
+        <!-- sparkles -->
+        <circle cx="52" cy="18" r="2" fill="#c9a96e" opacity=".5"/>
+        <circle cx="262" cy="80" r="1.5" fill="#4ecdc4" opacity=".5"/>
+        <circle cx="150" cy="12" r="2" fill="#e07fa0" opacity=".4"/>
+      </svg>
     </div>
     <div class="contact-cards reveal">
       <a class="contact-card" href="tel:+918866266678">
@@ -736,32 +1053,17 @@
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <p>Designed &amp; Built with ❤️ by Kanchi Rajgor · UI/UX Designer · 2025</p>
   <span class="footer-badge">Open to Work</span>
 </footer>
 
 <script>
-  // hamburger
   const ham = document.getElementById('hamburger');
   const mob = document.getElementById('mobileMenu');
-  ham.addEventListener('click', () => {
-    ham.classList.toggle('open');
-    mob.classList.toggle('open');
-  });
-  document.querySelectorAll('.mob-link').forEach(l => {
-    l.addEventListener('click', () => {
-      ham.classList.remove('open');
-      mob.classList.remove('open');
-    });
-  });
-
-  // scroll reveal
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.1 });
-
+  ham.addEventListener('click', () => { ham.classList.toggle('open'); mob.classList.toggle('open'); });
+  document.querySelectorAll('.mob-link').forEach(l => l.addEventListener('click', () => { ham.classList.remove('open'); mob.classList.remove('open'); }));
+  const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:.1});
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
 </body>
